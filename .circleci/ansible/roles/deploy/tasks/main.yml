@@ -6,7 +6,7 @@
 - name: start server
   shell: |
       cd /home/ubuntu/
-      tar xzvf artifact.tar.gz -C backend
+      tar -xzvf artifact.tar.gz -C backend
       cd backend
       sudo npm install
       sudo npm run build
