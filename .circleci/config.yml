@@ -153,6 +153,27 @@ jobs:
       - destroy-environment:
           s3_id: cvvptaa4za4k
 
+  configure-infrastructure:
+    docker:
+      - image: python:3.9.1-alpine3.12
+    steps:
+      - checkout
+      - add_ssh_keys:
+        fingerprints:
+          - "03:cd:74:9d:2a:32:17:de:6e:41:bd:52:22:61:9c:31"
+      - attach_workspace:
+        at: ~/      
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update aws-cli ansible 
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment:
+          s3_id: cvvptaa4za4k
 workflows:
   default:
     jobs:
