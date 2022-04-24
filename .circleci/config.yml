@@ -265,14 +265,14 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "03:cd:74:9d:2a:32:17:de:6e:41:bd:52:22:61:9c:31"
-      - attach_workspace:
-          at: ~/
-      - restore_cache:
-          keys: ['backend-build']
       - run:
           name: Install tar utility
           command: |
-            yum install -y tar gzip            
+            yum install -y tar gzip    
+      - attach_workspace:
+          at: ~/
+      - restore_cache:
+          keys: ['backend-build']              
       - run:
           name: Install dependencies
           command: |
