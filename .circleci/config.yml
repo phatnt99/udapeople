@@ -170,8 +170,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment:
-          s3_id: cvvptaa4za4k
+      # - destroy-environment:
+      #     s3_id: cvvptaa4za4k
 
   configure-infrastructure:
     docker:
