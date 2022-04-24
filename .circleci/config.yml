@@ -268,7 +268,11 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          keys: ['backend-build']        
+          keys: ['backend-build']
+      - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip            
       - run:
           name: Install dependencies
           command: |
