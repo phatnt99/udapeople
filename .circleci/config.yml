@@ -17,6 +17,24 @@ commands:
             aws cloudformation delete-stack \
                       --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
+  revert-migrations:
+    description: Revert the last migration if successfully run in the current workflow.
+    parameters:
+      # Add parameter here     
+    steps:
+      - run:
+          name: Revert migrations
+          # Add when this will run
+          command: |
+            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
+            SUCCESS = 1
+            if(( $SUCCESS==1 )); 
+            then
+            cd ~/project/backend
+            npm install
+            #  Add revert code here. You can find this in the Getting Started section.
+            npm run migrations:revert
+            fi
 jobs:
   build-frontend:
     docker:
@@ -193,9 +211,48 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
                 # Since Memstash.io was down, I'm gonna use workplace to store the denote success instead
-                echo "1" >>  .circleci/ansible/inventory.txt
+                echo "1" >>  .circleci/ansible/denote_success.txt
             fi
-      - destroy-environment           
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/denote_success.txt      
+      - destroy-environment:
+          s3_id: cvvptaa4za4k
+
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            cd frontend
+            yum -y install ansible nodejs npm tar gzip
+      - run:
+          name: Get backend url
+          command: |
+            cd frontend
+            export BACKEND_URL=$(aws ec2 describe-instances \
+                                    --filters Name=tag:Name,Values="udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
+                                    --query 'Reservations[*].Instances[*].PublicDnsName' \
+                                    --output text)
+            export API_URL="http://${BACKEND_URL}:3030"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_URL}:3030" >> .env
+            cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-cvvptaa4za4k --recursive
+      - revert-migrations      
+      - destroy-environment:
+          s3_id: cvvptaa4za4k            
 workflows:
   default:
     jobs:
