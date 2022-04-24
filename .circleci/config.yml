@@ -193,13 +193,13 @@ jobs:
 
   run-migrations:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.9.1-alpine3.12
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            yum -y install ansible nodejs npm tar gzip
+            apk add --update aws-cli nodejs npm 
       - run:
           name: Run migrations
           command: |
