@@ -209,7 +209,7 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
                 # Since Memstash.io was down, I'm gonna use workplace to store the denote success instead
-                echo "OK OK"
+                echo "OK OK OK"
                 echo "1" >>  denote_success.txt
             fi
             echo "result"
