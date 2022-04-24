@@ -197,6 +197,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            cd backend
+            yum -y install nodejs npm tar gzip
+      - run:
           name: Run migrations
           command: |
             cd backend
@@ -250,7 +255,7 @@ jobs:
             aws s3 cp dist s3://udapeople-cvvptaa4za4k --recursive
       - revert-migrations      
       - destroy-environment:
-          s3_id: cvvptaa4za4k            
+          s3_id: cvvptaa4za4k      
 workflows:
   default:
     jobs:
