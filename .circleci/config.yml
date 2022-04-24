@@ -297,7 +297,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-        at: ~/
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -332,7 +332,8 @@ jobs:
               return 1
             fi
       # Here's where you will add some code to rollback on failure  
-
+      - destroy-environment:
+          s3_id: cvvptaa4za4k
 workflows:
   default:
     jobs:
