@@ -277,7 +277,8 @@ jobs:
           name: Install dependencies
           command: |
             cd backend
-            yum -y install epel-release ansible tar gzip
+            yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+            yum -y install ansible tar gzip
             curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
             yum -y install nodejs
       - run:
