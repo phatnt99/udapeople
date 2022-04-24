@@ -259,16 +259,12 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.9.1-alpine3.12
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints:
             - "03:cd:74:9d:2a:32:17:de:6e:41:bd:52:22:61:9c:31"
-      - run:
-          name: Install tar utility
-          command: |
-            yum install -y tar gzip    
       - attach_workspace:
           at: ~/
       - restore_cache:
@@ -277,10 +273,8 @@ jobs:
           name: Install dependencies
           command: |
             cd backend
-            yum install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-            yum -y install ansible tar gzip
-            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
-            yum -y install nodejs
+            apk add --update ansible nodejs npm
+            pip install awscli
       - run:
           name: Deploy backend
           command: |
