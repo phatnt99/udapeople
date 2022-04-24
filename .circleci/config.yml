@@ -13,9 +13,9 @@ commands:
           command: |
             aws s3 rm --recursive s3://udapeople-<<parameters.s3_id>>
             aws cloudformation delete-stack \
-                      --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
+                      --stack-name "backend-${CIRCLE_WORKFLOW_ID:0:7}"
             aws cloudformation delete-stack \
-                      --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+                      --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.  
@@ -147,7 +147,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople \
-              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name "backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
       - run:
           name: Ensure front-end infrastructure exist
@@ -155,13 +155,13 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               --tags project=udapeople \
-              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --stack-name "frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID=cvvptaa4za4k
       - run:
           name: Add back-end ip to ansible inventory
           command: |
             BACKEND_URL=$(aws ec2 describe-instances \
-                                    --filters Name=tag:Name,Values="udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
+                                    --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
                                     --query 'Reservations[*].Instances[*].PublicDnsName' \
                                     --output text)
             echo "Backend URL: " ${BACKEND_URL}                        
@@ -239,7 +239,7 @@ jobs:
           command: |
             cd frontend
             export BACKEND_URL=$(aws ec2 describe-instances \
-                                    --filters Name=tag:Name,Values="udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
+                                    --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
                                     --query 'Reservations[*].Instances[*].PublicDnsName' \
                                     --output text)
             export API_URL="http://${BACKEND_URL}:3030"
@@ -308,7 +308,7 @@ jobs:
           name: Backend smoke test.
           command: |
             export BACKEND_URL=$(aws ec2 describe-instances \
-                                    --filters Name=tag:Name,Values="udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
+                                    --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
                                     --query 'Reservations[*].Instances[*].PublicDnsName' \
                                     --output text)
             export API_URL="http://${BACKEND_URL}:3030"
