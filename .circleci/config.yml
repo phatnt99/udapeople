@@ -20,13 +20,15 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.  
     steps:
+      - attach_workspace:
+          at: ~/
       - run:
           name: Revert migrations
           # Add when this will run
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
+            SUCCESS = $(cat project/backend/denote_success.txt)
+            if(( $SUCCESS == 1 )); 
             then
             cd ~/project/backend
             npm install
@@ -193,14 +195,14 @@ jobs:
 
   run-migrations:
     docker:
-      - image: cimg/node:14.18.1
+      - image: circleci/node:14.18.1
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            cd backend
-            npm i aws-cli
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       cd backend
+      #       npm i -g aws-cli
       - run:
           name: Run migrations
           command: |
@@ -214,8 +216,12 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
                 # Since Memstash.io was down, I'm gonna use workplace to store the denote success instead
-                echo "1" >>  .circleci/ansible/denote_success.txt
+                echo "1" >>  denote_success.txt
             fi
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/backend/denote_success.txt
       - revert-migrations     
       - destroy-environment:
           s3_id: cvvptaa4za4k
