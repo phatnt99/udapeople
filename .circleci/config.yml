@@ -24,6 +24,10 @@ commands:
           name: Revert migrations
           # Add when this will run
           command: |
+            echo "REVER"
+            ls
+            cd backend
+            ls
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             SUCCESS = $(cat denote_success.txt)
             if(( $SUCCESS == 1 )); 
@@ -209,13 +213,11 @@ jobs:
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
                 # Since Memstash.io was down, I'm gonna use workplace to store the denote success instead
-                echo "OK OK OK"
                 echo "1" >>  denote_success.txt
             fi
-            echo "result"
             cd backend
-            ls
-            cat migrations_dump.txt
+            echo "1" >>  denote_success.txt
+            
       - revert-migrations     
       - destroy-environment:
           s3_id: cvvptaa4za4k
