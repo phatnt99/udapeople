@@ -159,19 +159,19 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-        fingerprints:
-          - "03:cd:74:9d:2a:32:17:de:6e:41:bd:52:22:61:9c:31"
+          fingerprints:
+            - "03:cd:74:9d:2a:32:17:de:6e:41:bd:52:22:61:9c:31"
       - attach_workspace:
-        at: ~/      
+          at: ~/      
       - run:
-        name: Install dependencies
-        command: |
-          apk add --update aws-cli ansible 
+          name: Install dependencies
+          command: |
+            apk add --update aws-cli ansible 
       - run:
-        name: Configure server
-        command: |
-          cd .circleci/ansible
-          ansible-playbook -i inventory.txt configure-server.yml
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           s3_id: cvvptaa4za4k
 workflows:
