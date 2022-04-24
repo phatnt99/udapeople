@@ -13,4 +13,4 @@
       ls
       sudo npm install
       sudo npm run build
-      sudo pm2 start npm backend -- start
+      sudo pm2 start npm --name 'udapeople' -- start
