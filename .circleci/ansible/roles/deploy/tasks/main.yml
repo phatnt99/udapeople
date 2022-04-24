@@ -5,8 +5,12 @@
       dest: /home/ubuntu/artifact.tar.gz
 - name: start server
   shell: |
-      cd /home/ubuntu/
+      echo "START EXTRACT"
+      cd /home/ubuntu
+      ls
       tar -xzvf artifact.tar.gz -C .
+      echo "AFTER EXTRACT"
+      ls
       sudo npm install
       sudo npm run build
       sudo pm2 start npm backend -- start
