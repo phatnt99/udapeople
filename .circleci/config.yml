@@ -164,14 +164,14 @@ jobs:
       - attach_workspace:
         at: ~/      
       - run:
-          name: Install dependencies
-          command: |
-            apk add --update aws-cli ansible 
+        name: Install dependencies
+        command: |
+          apk add --update aws-cli ansible 
       - run:
-          name: Configure server
-          command: |
-            cd .circleci/ansible
-            ansible-playbook -i inventory.txt configure-server.yml
+        name: Configure server
+        command: |
+          cd .circleci/ansible
+          ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           s3_id: cvvptaa4za4k
 workflows:
