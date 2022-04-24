@@ -9,5 +9,4 @@
       tar -xzvf artifact.tar.gz -C .
       sudo npm install
       sudo npm run build
-      sudo pm2 stop default
       sudo pm2 start npm backend -- start
