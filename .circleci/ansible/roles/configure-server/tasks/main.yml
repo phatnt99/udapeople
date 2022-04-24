@@ -21,6 +21,5 @@
   become: yes
   npm:
     name: pm2
-    update_cache: yes
     state: present
     global: yes
