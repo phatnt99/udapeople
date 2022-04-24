@@ -19,7 +19,7 @@
 
 - name: Install pm2
   become: yes
-  apt:
+  npm:
     name: pm2
     update_cache: yes
     state: present
