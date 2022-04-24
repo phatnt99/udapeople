@@ -218,7 +218,9 @@ jobs:
                 echo "1" >>  denote_success.txt
             fi
             echo "result"
-            ls 
+            cd backend
+            ls
+            cat migrations_dump.txt
       - revert-migrations     
       - destroy-environment:
           s3_id: cvvptaa4za4k
