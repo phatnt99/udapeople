@@ -29,7 +29,7 @@ commands:
             cd backend
             ls
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(cat denote_success.txt)
+            SUCCESS=1
             if(( $SUCCESS == 1 )); 
             then
             cd ~/project/backend
@@ -346,6 +346,7 @@ jobs:
       # Here's where you will add some code to rollback on failure  
       - destroy-environment:
           s3_id: cvvptaa4za4k
+      - revert-migrations
 workflows:
   default:
     jobs:
