@@ -7,10 +7,10 @@
   shell: |
       echo "START EXTRACT"
       cd /home/ubuntu
-      ls
       tar -xzvf artifact.tar.gz -C .
-      echo "AFTER EXTRACT"
-      ls
       sudo npm install
       sudo npm run build
+      sudo pm2 stop default
       sudo pm2 start npm --name 'udapeople' -- start
+      cd dist
+      sudo pm2 start main.js --update-env
