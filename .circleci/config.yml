@@ -223,6 +223,8 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -234,10 +236,7 @@ jobs:
           name: Get backend url
           command: |
             cd frontend
-            export BACKEND_URL=$(aws ec2 describe-instances \
-                                    --filters Name=tag:Name,Values="backend-${CIRCLE_WORKFLOW_ID:0:7}" Name=instance-state-name,Values=running \
-                                    --query 'Reservations[*].Instances[*].PublicDnsName' \
-                                    --output text)
+            export BACKEND_URL=$(cat .circleci/ansible/inventory.txt)
             export API_URL="http://${BACKEND_URL}:3030"
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_URL}:3030" >> .env
