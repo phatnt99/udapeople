@@ -212,11 +212,9 @@ jobs:
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
-                # Since Memstash.io was down, I'm gonna use workplace to store the denote success instead
+                cd backend
                 echo "1" >>  denote_success.txt
             fi
-            cd backend
-            
       - revert-migrations     
       - destroy-environment:
           s3_id: cvvptaa4za4k
