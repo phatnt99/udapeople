@@ -165,6 +165,7 @@ jobs:
                                     --output text)
             echo "Backend URL: " ${BACKEND_URL}                        
             echo ${BACKEND_URL} >>  .circleci/ansible/inventory.txt
+            echo ${BACKEND_URL} > .circleci/ansible/backendapi.txt
       - persist_to_workspace:
           root: ~/
           paths:
@@ -235,7 +236,7 @@ jobs:
       - run:
           name: Get backend url
           command: |
-            export BACKEND_URL=$(cat .circleci/ansible/inventory.txt)
+            export BACKEND_URL=$(cat .circleci/ansible/backendapi.txt)
             cd frontend
             export API_URL="http://${BACKEND_URL}:3030"
             echo "API_URL = ${API_URL}"
