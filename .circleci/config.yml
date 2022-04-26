@@ -368,7 +368,6 @@ jobs:
         - run:
             name: Get old stack workflow id
             command: |
-              # your code here
               export OldWorkflowID=$(aws cloudformation \
                       list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
                       --no-paginate --output text)
