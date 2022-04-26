@@ -30,7 +30,7 @@ commands:
             cd backend
             ls
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS=$(cat denote.txt)
+            SUCCESS=$(cat denote_success.txt)
             if(( $SUCCESS == 1 )); 
             then
             cd ~/project/backend
